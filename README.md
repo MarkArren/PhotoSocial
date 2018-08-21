@@ -1,6 +1,11 @@
 # starter_repo
 Repo to initialize class repositories from, setups initial CI/CD for gitlab as well
 
+## regular files
+
+* **Dockerfile** - Initial dockerfile to help us setup our environment
+* **requirements.txt** - Blank requirements.txt file for us to add python package requirements into
+
 ## hidden files
 
 * **.gitignore** - ignores python code & macOS generated files that don't need to be in the repo
