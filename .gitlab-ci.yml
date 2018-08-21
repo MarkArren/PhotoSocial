@@ -1,0 +1,53 @@
+image: docker:latest
+# When using dind, it's wise to use the overlayfs driver for
+# improved performance.
+variables:
+  DOCKER_DRIVER: overlay
+services:
+- docker:dind
+
+stages:
+  - build
+  - lint
+  - test
+  - deploy
+
+#Run pylint_django on site/app code given default app/site folder names
+pylint:
+  image: "$CI_REGISTRY_IMAGE:testing"
+  stage: lint
+  script:
+    - python -V
+    #Change paths to your project/app folders
+    - pylint --load-plugins pylint_django --disable=missing-docstring ./mysite/mysite
+    - pylint --load-plugins pylint_django --disable=missing-docstring ./mysite/myapp
+
+#Build test container
+build:
+  stage: build
+  script:
+    - docker info
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE:testing .
+    - docker push $CI_REGISTRY_IMAGE:testing
+
+#Run django unit testing/coverage generation on app code
+test:
+  stage: test
+  image: "$CI_REGISTRY_IMAGE:testing"
+  script:
+    - cd /code
+    - coverage --version
+    - coverage run --source='.' ./manage.py test
+    - coverage report --skip-covered
+
+#Create latest docker container if all the tests/lint passes on master
+deploy:
+  only:
+    - master
+  stage: deploy
+  script:
+    - docker info
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE:latest .
+    - docker push $CI_REGISTRY_IMAGE:latest
