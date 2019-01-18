@@ -4,6 +4,7 @@ Repo to initialize class repositories from, setups initial CI/CD for gitlab as w
 ## regular files
 
 * **Dockerfile** - Initial dockerfile to help us setup our environment
+* **docker-compose.yml** - Initial starter docker-compose file
 * **requirements.txt** - Blank requirements.txt file for us to add python package requirements into
 
 ## hidden files
