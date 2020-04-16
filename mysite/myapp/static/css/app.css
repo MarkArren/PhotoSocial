@@ -1,0 +1,252 @@
+body{
+	background-color: rgb(250, 250, 250);
+}
+
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid gainsboro;
+    margin: 1em 0;
+    padding: 0;
+}
+
+/* Navigation Bar */
+
+.nav-bar {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	height: 55px;
+	padding-right: 16px;
+	background: white;
+	border-bottom: 1px solid gainsboro;
+}
+
+.nav-bar-left {
+	flex: 1;
+	/* Display */
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	/* Justify Content */
+	-webkit-box-pack: start;
+	-webkit-justify-content: flex-start;
+	-ms-flex-pack: start;
+	justify-content: flex-start;
+	align-items: center;
+	overflow: hidden;
+}
+
+.nav-bar-middle {
+	flex: 1;
+	/* Display */
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	/* Justify Content */
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+}
+
+.nav-bar-middle input{
+	/* text-align: center; */
+	font-size: 0.9em;
+	border-radius: 3px;
+	border: 1px solid gainsboro;
+}
+
+.nav-bar-right {
+	flex: 1;
+	/* Display */
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	/* Justify Content */
+	-webkit-box-pack: end;
+	-webkit-justify-content: flex-end;
+	-ms-flex-pack: end;
+	justify-content: flex-end;
+	justify-content: flex-end;
+	align-items: center;
+	/* Wrap */
+	-webkit-flex-wrap: nowrap;
+	-ms-flex-wrap: nowrap;
+	flex-wrap: nowrap;
+}
+
+.nav-bar-right li {
+	padding-left: 16px;
+	padding-right: 16px;
+	font-size: 1.7em;
+}
+
+
+/* Post */
+
+.posts {
+	max-width: 500px;
+	/* height: 500px; */
+	text-align: center;
+	margin: 0 auto;
+	display: flex;
+	/* flex-direction: row; */
+	flex-wrap: nowrap;
+	/* justify-content: space-between; */
+	background-color: white;
+	/* border-style: solid; */
+	border: 1px solid gainsboro;
+	border-radius: 3px;
+	margin-bottom: 60px;
+}
+
+.post-image {
+	background-color: blue;
+	flex: 15;
+	width: 450;
+	position: relative;
+}
+
+.post-caption {
+	/* background-color: grey; */
+	text-align: left;
+	color: white;
+	/* line-height: 0em; */
+	position: absolute;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-bottom: 4px;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+}
+
+.post-caption .username {
+	font-weight: 600;
+}
+
+.post-item-bar {
+	flex: 2;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: flex-end;
+	align-content: center;
+	align-items: center;
+}
+
+.post-button {
+	width: 50px;
+	/* height: 50px; */
+}
+
+.post-item-bar p {
+	color: black;
+}
+
+.post-icon {
+	color: black;
+	width: 45;
+	height: 45;
+	stroke-width: 1;
+}
+
+.fill-white {
+	fill: black;
+}
+
+.fill-red {
+	fill: red;
+}
+
+
+/* Profile Page */
+
+.profile{
+	max-width: 960px;
+	padding-top: 30px;
+	padding-left: 20px;
+	padding-right: 20px;
+	margin: 0 auto;
+}
+
+.profile-posts-3{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	margin-bottom: 1%;
+}
+
+.profile-posts-3 div{
+	width: 350px;
+}
+
+.profile-posts-3 :first-child{
+	
+	margin-right: 1%;
+}
+
+.profile-posts-3 :nth-child(2){
+	margin-right: 1%;
+}
+
+
+.profile-info{
+	display: flex;
+	margin-bottom: 2%;
+}
+
+.profile-picture{
+	height: 200px;
+	width: 200px;
+	border: 1px solid gainsboro;
+	border-radius: 50%;
+	margin-right: 5%;
+}
+
+.profile-picture img{
+	height: 200px;
+	width: 200px;
+	border: 1px solid gainsboro;
+	border-radius: 50%;
+}
+
+.profile-name{
+	font-size: 1.75em;
+	display: flex;
+}
+
+.profile-name :first-child{
+	margin-right: 2%;
+}
+
+.profile-bio{
+
+}
+
+
+/* Upload Page */
+.upload{
+	width: 960px;
+	padding: 20px;
+	margin: 0 auto;
+	display: flex;
+	justify-content: center;
+}
+
+.upload-image{
+	flex: 0 0 auto;
+}
+
+.upload-options{
+	flex: 0 0 auto;
+}

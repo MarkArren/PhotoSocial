@@ -1,0 +1,29 @@
+<nav class="nav-bar">
+	<div class="menu nav-bar-left">
+		<a href="/" class="menu-text">Assignment6</a>
+	</div>
+	<div class="menu nav-bar-middle">
+		<input type="search" placeholder="&#x2315; Search">
+	</div>
+	
+	<ul class="menu nav-bar-right">
+		{% if user.is_authenticated %}
+		<a href="/post">
+			<i data-feather="plus-square" class="post-icon"></i>
+		</a>
+		{% verbatim %}
+		<span v-if="showNotifications"> CLICKED </span>
+		<a v-on:click="showNotifications = !showNotifications">
+			<i data-feather="heart" class="post-icon fill-white"></i>
+		</a>
+		{% endverbatim %}
+		<a href="/u/{{user.get_username}}">
+			<i data-feather="user" class="post-icon"></i>
+		</a>
+		
+		{% else %}
+		<li><button type="button" class="button">Log in</button></li>
+		<li><button type="button" class="clear button">Sign Up</button></li>
+		{% endif %}
+	</ul>
+</nav>

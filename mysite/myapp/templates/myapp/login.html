@@ -1,0 +1,34 @@
+{% extends "myapp/base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="grid-x grid-padding-x">
+	<div class="large-4 medium-4 small-12 large-offset-4 medium-offset-4 cell">
+		<h3 class="text-center">Login</h3>
+		<form action="/" method="post">
+			{% csrf_token %}
+
+			{{ form.errors }}
+			<label>{{ form.username.label_tag }}</label>
+			{{ form.username }}
+			<label>{{ form.password.label_tag }}</label>
+			{{ form.password }}
+
+			{% for message in messages %}
+			<label>{{ message }}</label>
+			{% endfor %}
+
+			<label for="username">Username</label>
+  			<input type="text" id="username" name="username" required>
+
+			<label for="password">Password</label>
+  			<input type="password" id="password" name="password" required>
+
+
+			<input type="submit" class="button expanded" value="Login" />
+			<a href="/register/" class="secondary button expanded">Register</a>
+			<input type="hidden" name="next" value="{{ request.GET.next }}" />
+		</form>
+	</div>
+</div>
+{% endblock %}

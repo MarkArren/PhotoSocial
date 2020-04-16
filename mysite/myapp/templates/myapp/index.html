@@ -1,0 +1,89 @@
+{% extends "myapp/base.html" %}
+{% block content %}
+{% include "myapp/navbar.html" %}
+
+<h1>Home page</h1>
+<div>
+	<span v-if="unseen">
+		<div class="posts" v-for="post in posts">
+			<!-- {% verbatim %} -->
+			<div class="post-image">
+
+				<img src="https://placehold.it/450x500" alt="">
+				<div class="post-caption">
+					<span class="username">@username</span><br>
+					<span>This is a caption blah blah blah blah blah asdnabsdnabsjd basjkdb asjhdbasjhd asjhdfg
+						jkasdfghjasdgf
+						haSGDJKHASGD AJHSGD</span></div>
+			</div>
+			<div class="post-item-bar">
+				<button type="submit" class="post-button">
+					<i data-feather="user" class="post-icon"></i>
+					<p>‎</p>
+				</button>
+				<form v-on:submit.prevent="onSubmitLike" action="/" method="post">
+					<!-- {% endverbatim %}
+					{% csrf_token %}
+					{% verbatim %} 
+					<input type="hidden" id="id" name="id" :value="post.id"> -->
+
+					<button v-if="post.liked" type="submit" class="post-button">
+						<i data-feather="heart" class="post-icon fill-white"></i>
+						<p>192.7k</p>
+					</button>
+					<!-- <button v-else="post.liked" type="submit" class="post-button">
+						<i data-feather="heart" class="post-icon fill-red"></i>
+						<p>192.7k</p>
+					</button> -->
+				</form>
+				<button v-if="post.liked" type="submit" class="post-button">
+					<i data-feather="message-circle" class="post-icon fill-white"></i>
+					<p>2478</p>
+				</button>
+
+
+			</div>
+			<!-- {% endverbatim %} -->
+		</div>
+
+		<div class="posts">
+			<div class="post-image">
+
+				<img src="https://placehold.it/450x500" alt="">
+				<div class="post-caption">
+					<span class="username">@username</span><br>
+					<span>This is a caption blah blah blah blah blah asdnabsdnabsjd basjkdb asjhdbasjhd asjhdfg
+						jkasdfghjasdgf
+						haSGDJKHASGD AJHSGD</span></div>
+			</div>
+			<div class="post-item-bar">
+				<button type="submit" class="post-button">
+					<i data-feather="user" class="post-icon"></i>
+					<p>‎</p>
+				</button>
+
+
+				<button v-if="post.liked" type="submit" class="post-button">
+					<i data-feather="heart" class="post-icon fill-white"></i>
+					<p>192.7k</p>
+				</button>
+				<!-- <button v-else="post.liked" type="submit" class="post-button">
+			<i data-feather="heart" class="post-icon fill-red"></i>
+			<p>192.7k</p>
+		</button> -->
+
+
+				<button v-if="post.liked" type="submit" class="post-button">
+					<i data-feather="message-circle" class="post-icon fill-white"></i>
+					<p>2478</p>
+				</button>
+
+
+			</div>
+		</div>
+	</span>
+	<span v-if="seen">
+		<p>Posts Loading...</p>
+	</span>
+</div>
+{% endblock %}
