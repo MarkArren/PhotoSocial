@@ -6,49 +6,19 @@
 
 <div class="posts">
 	<span v-if="unseen">
-		<div v-for="post in posts">
-			<div class="post">
-				{% verbatim %}
-				<div class="post-image">
-					<img :src="post.image" />
-					<div class="post-caption">
-						<a :href="'/u/' + post.username" class="username">@{{ post.username }}</a><br>
-						<span>{{ post.caption }}</span></div>
-				</div>
-				<div class="post-item-bar">
-					<a :href="'/u/' + post.username">
-						<i data-feather="user" class="post-icon"></i>
-						<p>‎</p>
-					</a>
-					<form v-on:submit.prevent="onSubmitLike" action="/" method="post">
-						{% endverbatim %}
-						{% csrf_token %}
-						{% verbatim %}
-						<input type="hidden" name="post" :value="post.id">
-						<button v-if="post.liked" type="submit" class="post-button">
-							<i data-feather="heart" class="post-icon fill-white"></i>
-							<p>{{ post.likes }}</p>
-						</button>
-						<button v-else type="submit" class="post-button">
-							<i data-feather="heart" class="post-icon"></i>
-							<p>{{ post.likes }}</p>
-						</button>
-					</form>
-					<button type="submit" class="post-button">
-						<i data-feather="message-circle" class="post-icon fill-white"></i>
-						<p>{{ post.comments }}</p>
-					</button>
-				</div>
-			</div>
-		</div>
-		{% endverbatim %}
+		<post
+        v-for="post in posts"
+		v-bind:key="post.id"
+		v-bind:post="post"
+		v-on:refresh="fetchPostList()"
+      	></post>
 	</span>
 	<span v-if="seen">
-		<p>Posts Loading...</p>
+		<p>Searching for posts...</p>
 	</span>
 </div>
 {% endblock %}
 
-{% comment %} {% block scripts%}
-<script src="{% static "js/index.js"  %}"></script>
-{% endblock  %} {% endcomment %}
+{% block scripts%}
+<script src="{% static "js/search.js"  %}"></script>
+{% endblock  %}

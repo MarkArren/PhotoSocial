@@ -51,8 +51,7 @@
         v-for="post in posts"
 		v-bind:key="post.id"
 		v-bind:post="post"
-		v-on:liked="onSubmitLike($event)"
-		v-on:deleted="onDelete($event)"
+		v-on:refresh="fetchPostList()"
       	></post>
 		<!-- {% endverbatim %} -->
 	</span>

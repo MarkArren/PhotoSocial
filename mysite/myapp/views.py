@@ -107,16 +107,28 @@ def getPosts(request):
     return JsonResponse(context)
 
 def searchPosts(request):
-    if request.method == GET:
-        if 'search' in request.GET:
-            search = request.GET["search"]
+    if request.method == "GET":
+        return render(request, "myapp/search.html")
 
-            postObjects = models.PostModel.objects.filter
-            (
-            Q(profile__icontains=search) | 
-            Q(caption__icontains=search) | 
-            Q(location__icontains=search)
-            ).order_by('-date')
+def searchPosts2(request):
+    print("search2")      
+    if request.method == "GET":
+        print("search3")  
+        print(request.GET) 
+        if 'search' in request.GET:
+            print("search4")     
+            postsList = []
+            search = request.GET["search"]
+            print(search)
+
+            postObjects = models.PostModel.objects.filter(
+                Q(profile__user__username__icontains=search) | 
+                Q(caption__icontains=search) | 
+                Q(location__icontains=search)
+                ).order_by('-date')
+
+            print("length of postObjects" + str(len(postObjects)))  
+            
 
              # Loop through data backwards parsing values into the new list
             for i in range(len(postObjects)):
@@ -148,17 +160,19 @@ def searchPosts(request):
                     except models.LikeModel.DoesNotExist:
                         tempPost["liked"] = False
 
+                tempPost["token"] = csrf.get_token(request)
                 postsList += [tempPost]
 
             context = {
                 "posts": postsList,
-                "token": django.middleware.csrf.get_token(request)
             }
+            print(len(postsList))      
 
             return JsonResponse(context)
-            
+            # return render(request, "myapp/search.html", context=context)
+        
 
-        pass
+    return redirect("/")
 
 
 

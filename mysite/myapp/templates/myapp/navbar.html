@@ -1,11 +1,12 @@
 <nav class="nav-bar">
 	<div class="menu nav-bar-left">
-		<form action="/search" method="post">
-			<a href="/" class="menu-text">Assignment6</a>
-		</form>
+		<a href="/" class="menu-text">Assignment6</a>
 	</div>
 	<div class="menu nav-bar-middle">
-		<input type="search" name="search" placeholder="&#x2315; Search">
+		<form action="/search/" method="get">
+			{% csrf_token %}
+			<input type="search" name="search" placeholder="&#x2315; Search">
+		</form>
 	</div>
 	
 	<ul class="menu nav-bar-right">

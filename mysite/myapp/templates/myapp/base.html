@@ -21,6 +21,7 @@
 	<script src="https://unpkg.com/feather-icons"></script>
 	<script src="{% static "js/vendor/vue.js"  %}"></script>
 	<script src="{% static "js/navbar.js"  %}"></script>
+	<script src="{% static "js/app.js"  %}"></script>
 	
 	{% block scripts %}
 	{% endblock %}
@@ -30,10 +31,10 @@
 		$(document).ready(function() {
 			feather.replace();
 		});
-		$(window).on('load', function() { 
-			setTimeout(function(){ feather.replace(); }, 100);
-		});
-		setTimeout(function(){ feather.replace(); }, 400);
+		// $(window).on('load', function() { 
+			// setTimeout(function(){ feather.replace(); }, 100);
+		// });
+		// setTimeout(function(){ feather.replace(); }, 400);
 	</script>
 </body>
 

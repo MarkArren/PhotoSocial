@@ -12,24 +12,25 @@ var posts = new Vue({
     },
     methods:{
         fetchPostList: function(){
+            let url = new URL(window.location.href);
+            // const params = new URLSearchParams()
+            // params.append("search", url.searchParams.get("search"))
+            // params.append("test", "testParamter")
+
             axios
-				.get('/posts/')
+				.get('/searchvue/', {
+                    params: {
+                      "search": url.searchParams.get("search")
+                    }
+                })
                 .then(response => (this.posts = response.data.posts))
 			this.seen = false
-			this.unseen = true
-			console.log("Refreshing main page")
+            this.unseen = true
+            console.log("Refreshing search page")
         },
         cancelAutoUpdate: function(){ clearInterval(this.timer) },
     },
     beforeDestroy() {
 		this.cancelAutoUpdate();
-	},
-	//mounted() {
-	//	this. $nextTick(function () {
-	//		feather.replace();
-	//		console.log("mounted");
-	//		setTimeout(function(){ feather.replace(); }, 100);
-	//	})
-	//}
-	// components: {postComponent}
+    },
 })
