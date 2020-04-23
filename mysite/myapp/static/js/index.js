@@ -10,6 +10,14 @@ var postComponent = Vue.component("post", {
       </div>
 		</div>
 		<div class="post-item-bar">
+			<form v-on:submit.prevent="$emit('deleted', $event)" action="/" method="post">
+				<input type="hidden" name="post" :value="post.id">
+				<input type="hidden" name="csrfmiddlewaretoken" :value="post.token">
+				<button v-if="post.isOwnPost" type="submit" class="post-button">
+					<i data-feather="x-circle" class="post-icon"></i>
+					<p>‎</p>
+				</button>
+			</form>
 			<a :href="'/u/' + post.username">
 				<i data-feather="user" class="post-icon"></i>
 				<p>‎</p>
@@ -89,10 +97,34 @@ var posts = new Vue({
 					self.fetchPostList();
 				})
 				.catch(error => { });
+		},
+		onDelete: function (submitEvent) {
+			// Getting parameters
+			const params = new URLSearchParams();
+			params.append("post", submitEvent.target.elements.post.value);
+			params.append("csrfmiddlewaretoken", submitEvent.target.elements.csrfmiddlewaretoken.value);
+			params.append("type", "delete");
+			console.log("deleting post");
+
+			// Setting self so I can call this inside of promise
+			const self = this;
+			axios
+				.post('/', params)
+				.then(function (response) {
+					self.fetchPostList();
+				})
+				.catch(error => { });
 		}
     },
     beforeDestroy() {
 		this.cancelAutoUpdate();
 	},
+	mounted() {
+		this. $nextTick(function () {
+			feather.replace();
+			console.log("mounted");
+			setTimeout(function(){ feather.replace(); }, 100);
+		})
+	}
 	// components: {postComponent}
 })

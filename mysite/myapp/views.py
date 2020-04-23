@@ -29,6 +29,8 @@ def index(request):
                     print("TODO: comment")
                 elif request.POST["type"] == "follow":
                     return followProfile(request)
+                elif request.POST["type"] == "delete":
+                    return deletePost(request)
 
             
         elif request.method == "GET":
@@ -79,15 +81,21 @@ def getPosts(request):
 
         tempPost["likes"] = str(len(likeObjects))
         tempPost["comments"] = str(len(commentObjects))
+        tempPost["isOwnPost"] = False
 
-        # Checks if the logged in user has liked the post or not
+       
         if request.user.is_authenticated:
+             # Checks if the logged in user has liked the post or not
             try:
                 models.LikeModel.objects.get(
                     post=post, profile=getCurrentProfile(request))
                 tempPost["liked"] = True
             except models.LikeModel.DoesNotExist:
                 tempPost["liked"] = False
+
+            # Checks if it is users own post
+            if post.profile == profile:
+                tempPost["isOwnPost"] = True
         
         tempPost["token"] = csrf.get_token(request)
         postsList += [tempPost]
@@ -169,6 +177,18 @@ def likePost(request):
             like = models.LikeModel(
                 post=post, profile=getCurrentProfile(request))
             like.save()
+
+    return redirect("/")
+
+def deletePost(request):
+    if request.method == "POST":
+        post = models.PostModel.objects.get(id=request.POST["post"])
+
+         # Check if its user post
+        profile = getCurrentProfile(request)
+        if post.profile == profile:
+            print("owns post... deleting")
+            post.delete()
 
     return redirect("/")
 

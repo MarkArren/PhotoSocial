@@ -52,6 +52,7 @@
 		v-bind:key="post.id"
 		v-bind:post="post"
 		v-on:liked="onSubmitLike($event)"
+		v-on:deleted="onDelete($event)"
       	></post>
 		<!-- {% endverbatim %} -->
 	</span>

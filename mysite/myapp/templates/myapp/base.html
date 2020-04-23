@@ -27,8 +27,13 @@
 	<script>
 	
 		$(document).foundation();
-		feather.replace();
-		setTimeout(function(){ feather.replace(); }, 100);
+		$(document).ready(function() {
+			feather.replace();
+		});
+		$(window).on('load', function() { 
+			setTimeout(function(){ feather.replace(); }, 100);
+		});
+		setTimeout(function(){ feather.replace(); }, 400);
 	</script>
 </body>
 
