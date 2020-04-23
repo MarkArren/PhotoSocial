@@ -19,14 +19,17 @@
 	<script src="{% static "js/vendor/foundation.min.js"  %}"></script>
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<script src="https://unpkg.com/feather-icons"></script>
-	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-	<script src="{% static "js/app.js"  %}"></script>
-	<script>
-		$(document).foundation();
-		feather.replace()
-	</script>
+	<script src="{% static "js/vendor/vue.js"  %}"></script>
+	<script src="{% static "js/navbar.js"  %}"></script>
+	
 	{% block scripts %}
 	{% endblock %}
+	<script>
+	
+		$(document).foundation();
+		feather.replace();
+		setTimeout(function(){ feather.replace(); }, 100);
+	</script>
 </body>
 
 </html>

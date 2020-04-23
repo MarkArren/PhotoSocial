@@ -1,53 +1,59 @@
 {% extends "myapp/base.html" %}
 {% block content %}
 {% include "myapp/navbar.html" %}
+{% load static %}
 
+{% verbatim %}
 <div class="profile">
     <div class="profile-info">
         <div class="profile-picture">
-            <img src="https://placehold.it/200x200" alt="">
+            <img :src="profile.image" alt="">
         </div>
         <div class="profile-bio">
-            <div class="profile-name">
-                <div>{% lorem 2 w random %}</div>
-                {% if user.get_username ==  username %}
-                <div><button class="button">Edit Profile</button></div>
-                {% else %}
-                <div><button class="button">Follow</button></div>
-                {% endif %}
+            <div v-if="profile.isCurrentUser" class="profile-name">
+                <span>{{ profile.name }}</span>
+                <a href="/profileedit" class="button">Edit Profile</a>
+                <a href="/logout" class="button">Logout</a>
             </div>
-            <div>@{% lorem 1 w random %}</div>
+            <div v-else class="profile-name">
+
+                <span>{{ profile.name }}</span>
+                <div>
+                    <form v-on:submit.prevent="onSubmitFollow" action="/profile" method="post">
+                        {% endverbatim %}
+                        {% csrf_token %}
+                        {% verbatim %}
+                        <input type="hidden" name="profile" :value="profile.id">
+                        <button v-if="profile.isFollowing" type="submit" class="button">Unfollow</button>
+                        <button v-else type="submit" class="button">Follow</button>
+                    </form>
+                </div>
+            </div>
+            <div>@{{ profile.username }}</div>
             <div>
-                <div>20 Posts</div>
-                <div>10 Followers</div>
-                <div>20 Following</div>
+                <div>{{ profile.posts }} Posts</div>
+                <div>{{ profile.followers }} Followers</div>
+                <div>{{ profile.following }} Following</div>
             </div>
-            
         </div>
     </div>
-    <div>{% lorem 10 w random%}</div>
-    <hr/>
+    <div>{{ profile.bio }}</div>
+    <hr />
     <div class="profile-posts">
-        <!-- Total posts / 3 -->
-        <div class="profile-posts-3">
-            <div class="profile-post"><img src="https://placehold.it/300x300" alt=""></div>
-            <div class="profile-post"><img src="https://placehold.it/300x300" alt=""></div>
-            <div class="profile-post"><img src="https://placehold.it/300x300" alt=""></div>
-        </div>
-        <div class="profile-posts-3">
-            <div class="profile-post"><img src="https://placehold.it/300x300" alt=""></div>
-            <div class="profile-post"><img src="https://placehold.it/300x300" alt=""></div>
-            <div class="profile-post"><img src="https://placehold.it/300x300" alt=""></div>
-        </div>
-        <div class="profile-posts-3">
-            <div class="profile-post"><img src="https://placehold.it/300x300" alt=""></div>
-            <div class="profile-post"><img src="https://placehold.it/300x300" alt=""></div>
-            <div class="profile-post"></div>
+        <div v-for="i in profile.postRows" class="profile-posts-3">
+            <div v-for="j in 3" class="profile-post">
+                <img v-if="(((i-1) * 3) + (j-1)) < posts.length" :src="posts[(((i-1) * 3) + (j-1))].image">
+                <img v-else src="/media/placeholder/300x300.png">
+            </div>
         </div>
     </div>
 </div>
 
 
 
-
+{% endverbatim %}
 {% endblock %}
+
+{% block scripts%}
+<script src="{% static "js/profile.js"  %}"></script>
+{% endblock  %}

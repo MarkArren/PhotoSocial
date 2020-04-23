@@ -6,7 +6,7 @@
 
 <div class="posts">
 	<span v-if="unseen">
-		<!-- <div v-for="post in posts">
+		<div v-for="post in posts">
 			<div class="post">
 				{% verbatim %}
 				<div class="post-image">
@@ -40,67 +40,15 @@
 					</button>
 				</div>
 			</div>
-			</div> 
-			<post
-				v-for="post in posts"
-				v-bind:key="post.id"
-				v-bind:title="post.title"
-			></post> -->
-		
-		<post
-        v-for="post in posts"
-		v-bind:key="post.id"
-		v-bind:post="post"
-		v-on:liked="onSubmitLike($event)"
-      	></post>
-		<!-- {% endverbatim %} -->
+		</div>
+		{% endverbatim %}
 	</span>
 	<span v-if="seen">
 		<p>Posts Loading...</p>
 	</span>
-
-
-
-	<!-- <div class="post">
-		<div class="post-image">
-
-			<img src="https://placehold.it/450x500" alt="">
-			<div class="post-caption">
-				<span class="username">@username</span><br>
-				<span>This is a caption blah blah blah blah blah asdnabsdnabsjd basjkdb asjhdbasjhd asjhdfg
-					jkasdfghjasdgf
-					haSGDJKHASGD AJHSGD</span></div>
-		</div>
-		<div class="post-item-bar">
-			<button type="submit" class="post-button">
-				<i data-feather="user" class="post-icon"></i>
-				<p>‎</p>
-			</button>
-
-
-			<button v-if="post.liked" type="submit" class="post-button">
-				<i data-feather="heart" class="post-icon fill-white"></i>
-				<p>192.7k</p>
-			</button>
-			<button v-else="post.liked" type="submit" class="post-button">
-			<i data-feather="heart" class="post-icon fill-red"></i>
-			<p>192.7k</p>
-		</button>
-
-
-			<button v-if="post.liked" type="submit" class="post-button">
-				<i data-feather="message-circle" class="post-icon fill-white"></i>
-				<p>2478</p>
-			</button>
-
-
-		</div>
-	</div> -->
-
 </div>
-
 {% endblock %}
 
-{% block scripts%}
+{% comment %} {% block scripts%}
 <script src="{% static "js/index.js"  %}"></script>
-{% endblock  %}
+{% endblock  %} {% endcomment %}

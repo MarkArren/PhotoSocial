@@ -15,6 +15,9 @@ hr {
 /* Navigation Bar */
 
 .nav-bar {
+	position: fixed;
+	width: 100%;
+	z-index: 99999;
 	display: -webkit-box;
 	display: -webkit-flex;
 	display: -ms-flexbox;
@@ -93,7 +96,11 @@ hr {
 
 /* Post */
 
-.posts {
+.posts{
+	padding-top: 90px;
+}
+
+.post {
 	max-width: 500px;
 	/* height: 500px; */
 	text-align: center;
@@ -110,18 +117,18 @@ hr {
 }
 
 .post-image {
-	background-color: blue;
+	/* background-color: blue; */
 	flex: 15;
 	width: 450;
 	position: relative;
 }
 
 .post-caption {
-	/* background-color: grey; */
+	background-image: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,1));
 	text-align: left;
 	color: white;
-	/* line-height: 0em; */
 	position: absolute;
+	padding-top: 8px;
 	padding-left: 8px;
 	padding-right: 8px;
 	padding-bottom: 4px;
@@ -132,6 +139,7 @@ hr {
 
 .post-caption .username {
 	font-weight: 600;
+	color: inherit;
 }
 
 .post-item-bar {
@@ -173,7 +181,7 @@ hr {
 
 .profile{
 	max-width: 960px;
-	padding-top: 30px;
+	padding-top: 85px;
 	padding-left: 20px;
 	padding-right: 20px;
 	margin: 0 auto;
@@ -184,19 +192,25 @@ hr {
 	flex-direction: row;
 	justify-content: center;
 	margin-bottom: 1%;
+	width: 100%;
 }
 
 .profile-posts-3 div{
-	width: 350px;
+	width: 33.33%;
+	order: 1;
 }
 
 .profile-posts-3 :first-child{
-	
 	margin-right: 1%;
 }
 
 .profile-posts-3 :nth-child(2){
 	margin-right: 1%;
+}
+
+.profile-post img{
+	max-width: 100%;
+	object-fit: cover;
 }
 
 
@@ -211,6 +225,7 @@ hr {
 	border: 1px solid gainsboro;
 	border-radius: 50%;
 	margin-right: 5%;
+	flex: 0 0 auto;
 }
 
 .profile-picture img{
@@ -218,6 +233,14 @@ hr {
 	width: 200px;
 	border: 1px solid gainsboro;
 	border-radius: 50%;
+}
+
+.profile-bio{
+	flex: 1 0 auto;
+}
+
+.profile-bio a{
+	margin-right: 10px;
 }
 
 .profile-name{
@@ -229,15 +252,13 @@ hr {
 	margin-right: 2%;
 }
 
-.profile-bio{
-
-}
 
 
 /* Upload Page */
 .upload{
 	width: 960px;
 	padding: 20px;
+	padding-top: 75px;
 	margin: 0 auto;
 	display: flex;
 	justify-content: center;

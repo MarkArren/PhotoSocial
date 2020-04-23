@@ -3,16 +3,19 @@
 {% include "myapp/navbar.html" %}
 
 <div class="upload">
-    <div class="upload-image">
-
-    </div>
-    <div class="upload-options">
-        <input type="button" class="button" value="Select Image">
-        <input type="text" name="caption" id="caption" placeholder="Enter Caption">
-        <input type="text" name="location" id="location" placeholder="Enter Location">
-        <input type="text" name="tag" id="tag" placeholder="Tag People">
-        <input type="submit" class="button" value="Post">
-    </div>
+    <form action="/post/" method="post" enctype='multipart/form-data'>
+        {% csrf_token %}
+        <div class="upload-image">
+            {{ form.image }}
+        </div>
+        <div class="upload-options">
+            <label class="is-invalid-label">‎‎‏‏‎{{ form.errors.as_text }} </label>
+            {{ form.caption }}
+            {{ form.location }}
+            <input type="text" name="tag" id="tag" placeholder="Tag People">
+            <input type="submit" class="button" value="Post">
+        </div>
+    </form>
 </div>
 
 {% endblock %}
