@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from datetime import datetime, timezone
+from django.middleware import csrf
 
 # Saves users profile picture to /profiles/{username}/profilepicture.{ext}
 def profilePicturePath(instance, filename):
@@ -20,10 +22,25 @@ class ProfileModel(models.Model):
 
     def __str__(self):
         return self.fullname
-        # name = self.user.first_name + self.user.last_name
-        # if name == "":
-        #     return self.user.username
-        # return name
+
+    def toDict(self):
+        postObjects = PostModel.objects.filter(profile=self).order_by('-date')
+
+        profile={}
+        profile["id"] = self.id
+        profile["username"] = self.user.username
+        profile["name"] = str(self)
+        if (self.profilePicture):
+            profile["image"] = self.profilePicture.url
+        else:
+            profile["image"] = "/media/placeholder/300x300.png"
+        profile["bio"] = self.bio
+
+        profile["posts"] = str(len(postObjects))
+        profile["followers"] = str(self.followedBy.all().count())
+        profile["following"] = str(self.following.all().count())
+
+        return profile
 
 
 
@@ -39,6 +56,49 @@ class PostModel(models.Model):
     location = models.CharField(max_length=50, blank=True)
     date = models.DateTimeField(auto_now_add=True)
 
+
+    def toDict(self):
+        likeObjects = LikeModel.objects.filter(post=self)
+        commentObjects = CommentModel.objects.filter(post=self)
+
+        tempPost = {}
+        tempPost["id"] = self.id
+        tempPost["image"] = self.image.url
+        tempPost["caption"] = self.caption
+        tempPost["location"] = self.location
+        tempPost["username"] = self.profile.user.username
+        tempPost["likes"] = str(len(likeObjects))
+        tempPost["comments"] = str(len(commentObjects))
+        if isinstance(self.date, datetime):
+            tempPost["date"] = getTimeDifference(self.date)
+
+        return tempPost
+
+    def toDictExtra(self, request, profile):
+        tempPost = self.toDict()
+        tempPost["isOwnPost"] = False
+        tempPost["liked"] = False
+
+       
+        if request.user.is_authenticated:
+             # Checks if the logged in user has liked the post or not
+            try:
+                LikeModel.objects.get(
+                    post=self, profile=profile)
+                tempPost["liked"] = True
+            except LikeModel.DoesNotExist:
+                pass
+
+            # Checks if it is users own post
+            if self.profile == profile:
+                tempPost["isOwnPost"] = True
+        
+        tempPost["token"] = csrf.get_token(request)
+        return tempPost
+
+
+
+
 class LikeModel(models.Model):
     post = models.ForeignKey(PostModel, on_delete=models.CASCADE)
     profile = models.ForeignKey(ProfileModel, on_delete=models.CASCADE)
@@ -53,3 +113,20 @@ class CommentModel(models.Model):
 
     def __str__(self):
         return self.comment
+
+def getTimeDifference(time):
+    difference = datetime.now(timezone.utc) - time
+    hours = difference.seconds / 3600
+
+    if difference.days >= 365:
+        return time.strftime("%d %B %Y")
+    elif difference.days >= 7:
+        return time.strftime("%d %B")
+    elif difference.days >= 1:
+        return str(int(difference.days)) + " days ago"
+    elif hours > 1:
+        return str(int(hours)) + " hours ago"
+    elif difference.seconds >= 60:
+        return str(int(difference.seconds / 60)) + " minutes ago"
+    else:
+        return str(int(difference.seconds)) + " seconds ago"

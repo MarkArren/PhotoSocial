@@ -15,7 +15,7 @@ urlpatterns = [
     path('post/', views.post),
     path('posts/', views.getPosts),
     path('search/', views.searchPosts),
-    path('searchvue/', views.searchPosts2),
+    path('searchvue/', views.searchPostsJSON),
     path('messages/', views.index),
 ]+ static(
     settings.MEDIA_URL,

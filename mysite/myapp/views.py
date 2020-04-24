@@ -21,20 +21,16 @@ def index(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             if 'type' in request.POST:
-                # POST request to like post
+                # Process post requests for like, comment, delete and follow
                 if request.POST["type"] == "like":
                     return likePost(request)
-                # POST request to comment on post
                 elif request.POST["type"] == "comment":
                     print("TODO: comment")
-                elif request.POST["type"] == "follow":
-                    return followProfile(request)
                 elif request.POST["type"] == "delete":
                     return deletePost(request)
+                elif request.POST["type"] == "follow":
+                    return followProfile(request)
 
-            
-        elif request.method == "GET":
-            print("GET")
         return render(request, 'myapp/index.html')
 
     # Display log in page
@@ -64,41 +60,8 @@ def getPosts(request):
     # Loop through data backwards parsing values into the new list
     for i in range(len(postObjects)):
         post = postObjects[i]
-
-        likeObjects = models.LikeModel.objects.filter(post=post)
-        commentObjects = models.CommentModel.objects.filter(post=post)
-
-
-        tempPost = {}
-        tempPost["id"] = post.id
-        tempPost["image"] = post.image.url
-        tempPost["caption"] = post.caption
-        tempPost["location"] = post.location
-        tempPost["username"] = post.profile.user.username
-
-        if isinstance(post.date, datetime):
-            tempPost["date"] = getTimeDifference(post.date)
-
-        tempPost["likes"] = str(len(likeObjects))
-        tempPost["comments"] = str(len(commentObjects))
-        tempPost["isOwnPost"] = False
-
-       
-        if request.user.is_authenticated:
-             # Checks if the logged in user has liked the post or not
-            try:
-                models.LikeModel.objects.get(
-                    post=post, profile=getCurrentProfile(request))
-                tempPost["liked"] = True
-            except models.LikeModel.DoesNotExist:
-                tempPost["liked"] = False
-
-            # Checks if it is users own post
-            if post.profile == profile:
-                tempPost["isOwnPost"] = True
-        
-        tempPost["token"] = csrf.get_token(request)
-        postsList += [tempPost]
+        tempPost = post.toDictExtra(request, profile)
+        postsList.append(tempPost.copy())
 
     context = {
         "posts": postsList,
@@ -110,58 +73,24 @@ def searchPosts(request):
     if request.method == "GET":
         return render(request, "myapp/search.html")
 
-def searchPosts2(request):
-    print("search2")      
+def searchPostsJSON(request):    
     if request.method == "GET":
-        print("search3")  
-        print(request.GET) 
-        if 'search' in request.GET:
-            print("search4")     
+        if 'search' in request.GET:    
             postsList = []
             search = request.GET["search"]
-            print(search)
 
+            profile = getCurrentProfile(request)
             postObjects = models.PostModel.objects.filter(
                 Q(profile__user__username__icontains=search) | 
                 Q(caption__icontains=search) | 
                 Q(location__icontains=search)
                 ).order_by('-date')
 
-            print("length of postObjects" + str(len(postObjects)))  
-            
 
-             # Loop through data backwards parsing values into the new list
+            # Loop through data parsing values into the new list
             for i in range(len(postObjects)):
                 post = postObjects[i]
-
-                likeObjects = models.LikeModel.objects.filter(post=post)
-                commentObjects = models.CommentModel.objects.filter(post=post)
-
-
-                tempPost = {}
-                tempPost["id"] = post.id
-                tempPost["image"] = post.image.url
-                tempPost["caption"] = post.caption
-                tempPost["location"] = post.location
-                tempPost["username"] = post.profile.user.username
-
-                if isinstance(post.date, datetime):
-                    tempPost["date"] = getTimeDifference(post.date)
-
-                tempPost["likes"] = str(len(likeObjects))
-                tempPost["comments"] = str(len(commentObjects))
-
-                # Checks if the logged in user has liked the post or not
-                if request.user.is_authenticated:
-                    try:
-                        models.LikeModel.objects.get(
-                            post=post, profile=getCurrentProfile(request))
-                        tempPost["liked"] = True
-                    except models.LikeModel.DoesNotExist:
-                        tempPost["liked"] = False
-
-                tempPost["token"] = csrf.get_token(request)
-                postsList += [tempPost]
+                postsList.append(post.toDictExtra(request, profile).copy())
 
             context = {
                 "posts": postsList,
@@ -170,7 +99,6 @@ def searchPosts2(request):
 
             return JsonResponse(context)
             # return render(request, "myapp/search.html", context=context)
-        
 
     return redirect("/")
 
@@ -198,7 +126,7 @@ def deletePost(request):
     if request.method == "POST":
         post = models.PostModel.objects.get(id=request.POST["post"])
 
-         # Check if its user post
+        # Check if its user post
         profile = getCurrentProfile(request)
         if post.profile == profile:
             print("owns post... deleting")
@@ -227,23 +155,6 @@ def followProfile(request):
             print("followed " + otherProfile.user.username)
 
     return redirect("/")
-
-def getTimeDifference(time):
-    difference = datetime.now(timezone.utc) - time
-    hours = difference.seconds / 3600
-
-    if difference.days >= 365:
-        return time.strftime("%d %B %Y")
-    elif difference.days >= 7:
-        return time.strftime("%d %B")
-    elif difference.days >= 1:
-        return str(int(difference.days)) + " days ago"
-    elif hours > 1:
-        return str(int(hours)) + " hours ago"
-    elif difference.seconds >= 60:
-        return str(int(difference.seconds / 60)) + " minutes ago"
-    else:
-        return str(int(difference.seconds)) + " seconds ago"
 
 # Get profile page
 def profile(request,username):
@@ -279,19 +190,7 @@ def getProfile(request):
             postsList += [tempPost]
     
         # Get all profile info
-        profile={}
-        profile["id"] = profileObject.id
-        profile["username"] = userObject.username
-        profile["name"] = str(profileObject)
-        if (profileObject.profilePicture):
-            profile["image"] = profileObject.profilePicture.url
-        else:
-            profile["image"] = "/media/placeholder/300x300.png"
-        profile["bio"] = profileObject.bio
-
-        profile["posts"] = str(len(postObjects))
-        profile["followers"] = str(profileObject.followedBy.all().count())
-        profile["following"] = str(profileObject.following.all().count())
+        profile = dict(profileObject.toDict())
 
         # Checks if the logged in user is following the user
         if request.user.is_authenticated:
