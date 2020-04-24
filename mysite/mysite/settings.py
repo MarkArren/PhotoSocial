@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'myapp',
     'django_extensions',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -126,3 +127,14 @@ MEDIA_URL = '/media/'
 
 # Change where you get redirected to after log in
 LOGIN_REDIRECT_URL = '/'
+
+# Routing for django channels
+ASGI_APPLICATION = "mysite.routing.application"
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis', 6379)],
+        },
+    },
+}

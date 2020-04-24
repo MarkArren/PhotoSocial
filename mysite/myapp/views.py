@@ -16,6 +16,16 @@ from . import forms
 
 
 
+def chatIndex(request):
+    return render(request, 'myapp/chatIndex.html')
+
+def chatRoom(request, room_name):
+    return render(request, 'myapp/chatRoom.html', {
+        'room_name': room_name
+    })
+
+
+
 def index(request):
     # Display home page
     if request.user.is_authenticated:
