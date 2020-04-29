@@ -67,10 +67,29 @@ class PostModel(models.Model):
         tempPost["caption"] = self.caption
         tempPost["location"] = self.location
         tempPost["username"] = self.profile.user.username
-        tempPost["likes"] = str(len(likeObjects))
-        tempPost["comments"] = str(len(commentObjects))
+        tempPost["likeCount"] = str(len(likeObjects))
+        tempPost["commentCount"] = str(len(commentObjects))
         if isinstance(self.date, datetime):
             tempPost["date"] = getTimeDifference(self.date)
+
+
+        # In list of comments store a dict with a comment and its children
+        parentCommentObjects = CommentModel.objects.filter(post=self, parentComment__isnull=True)
+        comments = []
+        for comment in parentCommentObjects:
+            commentDict = {}
+            commentDict["comment"] = comment.toDict()
+
+            # Create list of child comments
+            childCommentsList = []
+            childComments = CommentModel.objects.filter(post=self, parentComment=comment)
+            for childComment in childComments:
+                childCommentsList.append(childComment.toDict())
+            
+            commentDict["childComments"] = childCommentsList
+            comments.append(commentDict)
+            # comments.append(comment.toDict())
+        tempPost["comments"] = comments
 
         return tempPost
 
@@ -109,10 +128,22 @@ class CommentModel(models.Model):
     profile = models.ForeignKey(ProfileModel, on_delete=models.CASCADE)
     comment = models.CharField(max_length=512)
     date = models.DateTimeField(auto_now_add=True)
-    parentComment = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, related_name='childComment')
+    parentComment = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='childComment')
 
     def __str__(self):
         return self.comment
+
+    def toDict(self):
+        tempComment = {}
+        tempComment["id"] = self.id
+        tempComment["username"] = self.profile.user.username
+        tempComment["comment"] = self.comment
+        tempComment["profilePicture"] = self.profile.profilePicture.url
+
+        if self.parentComment:
+            tempComment["parentComment"] = self.parentComment.id
+
+        return tempComment
 
 def getTimeDifference(time):
     difference = datetime.now(timezone.utc) - time

@@ -35,7 +35,7 @@ def index(request):
                 if request.POST["type"] == "like":
                     return likePost(request)
                 elif request.POST["type"] == "comment":
-                    print("TODO: comment")
+                    return commentPost(request)
                 elif request.POST["type"] == "delete":
                     return deletePost(request)
                 elif request.POST["type"] == "follow":
@@ -132,6 +132,23 @@ def likePost(request):
 
     return redirect("/")
 
+def commentPost(request):
+    if request.method == "POST":
+        post = models.PostModel.objects.get(id=request.POST["post"])
+        comment = request.POST["comment"]
+        parentComment = request.POST["parentComment"]
+        
+        # Get parent comment if specified
+        if parentComment == "":
+            parentComment = None
+        else:
+            parentComment = models.CommentModel.objects.get(id=request.POST["parentComment"])
+
+        comment = models.CommentModel(post=post, profile=getCurrentProfile(request), comment=comment, parentComment=parentComment)
+        comment.save()
+
+    return redirect("/")
+
 def deletePost(request):
     if request.method == "POST":
         post = models.PostModel.objects.get(id=request.POST["post"])
@@ -144,27 +161,6 @@ def deletePost(request):
 
     return redirect("/")
 
-
-def followProfile(request):
-    if request.method == "POST":
-        profile = getCurrentProfile(request)
-        otherProfile = models.ProfileModel.objects.get(id=request.POST["profile"])
-
-        # Check if user is already following profile
-        if len(profile.following.filter(id=otherProfile.id)):
-            # Unfollow profile
-            follow = profile.following.filter(id=otherProfile.id)
-            print(follow)
-            profile.following.remove(otherProfile)
-            profile.save()
-            print("unfollowed " + otherProfile.user.username)
-        else:
-             # Follow profile
-            profile.following.add(otherProfile)
-            profile.save()
-            print("followed " + otherProfile.user.username)
-
-    return redirect("/")
 
 # Get profile page
 def profile(request,username):
@@ -259,36 +255,26 @@ def profileedit(request):
     else:
         return redirect("/")
 
-
-def register_view(request):
-    # profileFormSet = modelformset_factory(models.ProfileModel, fields="")
-
+def followProfile(request):
     if request.method == "POST":
-        userForm = forms.RegistrationForm(request.POST)
-        profileForm = forms.ProfileForm(request.POST, request.FILES)
+        profile = getCurrentProfile(request)
+        otherProfile = models.ProfileModel.objects.get(id=request.POST["profile"])
 
-        if userForm.is_valid() and profileForm.is_valid():
-            user = userForm.save()
-
-            # Create profile for user
-            profile = profileForm.save(commit=False)
-            profile.user = user
+        # Check if user is already following profile
+        if len(profile.following.filter(id=otherProfile.id)):
+            # Unfollow profile
+            follow = profile.following.filter(id=otherProfile.id)
+            print(follow)
+            profile.following.remove(otherProfile)
             profile.save()
+            print("unfollowed " + otherProfile.user.username)
+        else:
+             # Follow profile
+            profile.following.add(otherProfile)
+            profile.save()
+            print("followed " + otherProfile.user.username)
 
-            # Login user
-            user = authenticate(
-                request, username=userForm.cleaned_data['username'], password=userForm.cleaned_data['password1'])
-            login(request, user)
-
-            return redirect("/")
-    else:
-        userForm = forms.RegistrationForm()
-        profileForm = forms.ProfileForm()
-    context = {
-        "form": userForm,
-        'profileForm': profileForm
-    }
-    return render(request, "myapp/register.html", context=context)
+    return redirect("/")
 
 
 # Post page

@@ -100,20 +100,26 @@ hr {
 	padding-top: 90px;
 }
 
-.post {
+.post-container{
 	max-width: 500px;
-	/* height: 500px; */
-	text-align: center;
 	margin: 0 auto;
-	display: flex;
-	/* flex-direction: row; */
-	flex-wrap: nowrap;
-	/* justify-content: space-between; */
 	background-color: white;
 	/* border-style: solid; */
 	border: 1px solid gainsboro;
 	border-radius: 3px;
 	margin-bottom: 60px;
+	position: relative;
+	/* text-align: center; */
+}
+
+.post {
+	/* height: 500px; */
+	
+	
+	display: flex;
+	/* flex-direction: row; */
+	flex-wrap: nowrap;
+	/* justify-content: space-between; */
 }
 
 .post-image {
@@ -153,7 +159,9 @@ hr {
 }
 
 .post-button {
-	width: 50px;
+	/* width: 50px; */
+	cursor: pointer;
+	text-align: center;
 	/* height: 50px; */
 }
 
@@ -166,6 +174,87 @@ hr {
 	width: 45;
 	height: 45;
 	stroke-width: 1;
+}
+
+.comment-container{
+	position: absolute;
+	width: 100%;
+	height: 80%;
+	bottom: 0;
+	left: 0;
+	z-index: 10;
+	background-color: white;
+	border-top: 1px solid gainsboro;
+	border-radius: 3px;
+}
+
+.comments {
+	position: absolute;
+	width: 100%;
+	/* height: 80%;
+	bottom: 0;
+	left: 0; */
+	z-index: 10;
+	background-color: white;
+	border-top: 1px solid gainsboro;
+	border-radius: 3px;
+	overflow-y: auto;
+	height: 84%;
+	/* top: 30px */
+}
+
+.comment{
+	display: flex;
+    margin: 0 10px;
+    margin-top: 10px;
+    /* border-bottom: 1px solid gainsboro; */
+}
+
+.comment img{
+	height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    border: 1px solid gainsboro;
+    margin-right: 20px;
+}
+
+.comment .username{
+	font-weight: 550;
+}
+
+.comment .reply{
+	color: grey;
+}
+
+.child-comments{
+	padding-left: 50px;
+    margin: 10px auto;
+}
+
+.comments-top-bar{
+	text-align: center;
+	height: 30px;
+	cursor: pointer;
+}
+
+.comment-form{
+	position: absolute;
+	bottom:0;
+	display: flex;
+	width: 100%;
+	height: 40px;
+	z-index: 20;
+}
+
+.comment-form input{
+	border: 1px solid gainsboro;
+	border-radius: 10px;
+	text-align: left;
+}
+
+.comment-form div{
+	cursor: pointer;
+    margin: 8px 5px;
 }
 
 .fill-white {
