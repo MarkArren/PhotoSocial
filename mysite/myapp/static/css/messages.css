@@ -1,9 +1,31 @@
 .message-container{
-    margin: 0 auto;
+    margin: auto;
     padding: 20px;
-
+    padding-top: 80px;
+    text-align: center;
+    font-weight: 600;
 }
 
 .message{
     width: 400px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid gainsboro;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    color: black;
+    font-weight: 300;
+}
+
+
+.input-text{
+    border: 1px solid gainsboro;
+    border-radius: 3px;
+    max-width: 400px;
+    margin: auto;
+}
+
+.input-button{
+
 }

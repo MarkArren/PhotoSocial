@@ -16,23 +16,29 @@ from . import forms
 
 
 
-def chatIndex(request):
-    return render(request, 'myapp/chatIndex.html')
-
 def chatRoom(request, room_name):
-    return render(request, 'myapp/chatRoom.html', {
-        'room_name': room_name
-    })
+    if request.user.is_authenticated:
+        return render(request, 'myapp/chatroom.html', {
+            'room_name': room_name,
+            'username': request.user.username
+        })
+    else:
+        return redirect("/")
 
 def messages(request):
-    followingList = getCurrentProfile(request).toDictFollowers()
-    print(followingList)
-    for person in followingList:
-        print(person.user.username)
-    context = {
-        "following": followingList,
-    }
-    return render(request, 'myapp/chats.html', context)
+    if request.user.is_authenticated:
+        followingList = getCurrentProfile(request).toDictFollowers()
+        print(followingList)
+        for person in followingList:
+            print(person.user.username)
+        context = {
+            "following": followingList,
+            "room_name": request.user.username,
+            'username': request.user.username
+        }
+        return render(request, 'myapp/chats.html', context)
+    else:
+        return redirect("/")
 
 
 def index(request):

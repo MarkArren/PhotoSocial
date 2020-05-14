@@ -16,11 +16,9 @@ urlpatterns = [
     path('posts/', views.getPosts),
     path('search/', views.searchPosts),
     path('searchvue/', views.searchPostsJSON),
-    path('messages/', views.messages),
     path('notifications/', views.getNotifications),
-
-    path('chat/', views.chatIndex),
-    path('chat/<str:room_name>/', views.chatRoom),
+    path('messages/', views.messages),
+    path('messages/<str:room_name>/', views.chatRoom),
 ]+ static(
     settings.MEDIA_URL,
     document_root=settings.MEDIA_ROOT

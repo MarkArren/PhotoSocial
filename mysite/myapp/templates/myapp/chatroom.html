@@ -6,44 +6,15 @@
 {% endblock %}
 {% block content %}
 {% include "myapp/navbar.html" %}
-
 <div class="message-container">
-    <br>Enter custom chat room<br>
-    <input id="room-name-input-custom" class="input-text" type="text" size="100"><br>
-    <input id="room-name-submit-custom" class="input-button button" type="button" value="Enter">
-    
-    <br>Enter one of your followers chat room<br>
-    {% for person in following %}
-    <a href="/messages/{{person.user.username}}">
-        <div class="message">{{ person.user.username }}</div>
-    </a>
-    {% empty %}
-    You are currently not following anyone!
-    {% endfor %}
-
-    <br>Your chat room!<br>
+    <br>Chat Room<br>
     <textarea id="chat-log" class="input-text" cols="100" rows="20"></textarea><br>
     <input id="chat-message-input" class="input-text" type="text" size="100"><br>
     <input id="chat-message-submit" class="input-button button" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
     {{ username|json_script:"username" }}
 </div>
-
 <script>
-    // Script to go to chat room
-    document.querySelector('#room-name-input-custom').focus();
-    document.querySelector('#room-name-input-custom').onkeyup = function(e) {
-        if (e.keyCode === 13) {  // enter, return
-            document.querySelector('#room-name-submit-custom').click();
-        }
-    };
-
-    document.querySelector('#room-name-submit-custom').onclick = function(e) {
-        var roomName = document.querySelector('#room-name-input-custom').value;
-        window.location.pathname = '/messages/' + roomName + '/';
-    };
-
-
     // Script for current chat room
     const roomName = JSON.parse(document.getElementById('room-name').textContent);
     const username = JSON.parse(document.getElementById('username').textContent)
@@ -82,5 +53,6 @@
         messageInputDom.value = '';
     };
 </script>
+
 
 {% endblock %}
