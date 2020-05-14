@@ -93,6 +93,22 @@ hr {
 	font-size: 1.7em;
 }
 
+.notification-container {
+    position: fixed;
+    top: 60px;
+	right: 17px;
+	max-width: 500px;
+    z-index: 99999999;
+    border: 1px solid gainsboro;
+    background-color: white;
+    border-radius: 3px;
+    padding: 17px;
+}
+
+.notification{
+	padding: 7px 10px;
+}
+
 
 /* Post */
 
@@ -159,10 +175,11 @@ hr {
 }
 
 .post-button {
-	/* width: 50px; */
 	cursor: pointer;
-	text-align: center;
-	/* height: 50px; */
+    text-align: center;
+    height: 50px;
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .post-item-bar p {

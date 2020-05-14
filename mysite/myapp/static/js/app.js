@@ -64,7 +64,7 @@ var postComponent = Vue.component("post", {
                 </div>
             </div>
             <div class="comment-form">
-                <input v-bind:value="comment" v-on:input="comment = $event.target.value" type="text" name="comment">
+                <input v-bind:value="comment" v-on:input="comment = $event.target.value" placeholder="Add Comment..." type="text" name="comment">
                 <div v-on:click="onSubmitComment"><i data-feather="send" class="post-icon"></i></button>
                 </div>
             </div>

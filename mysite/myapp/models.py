@@ -33,7 +33,7 @@ class ProfileModel(models.Model):
         if (self.profilePicture):
             profile["image"] = self.profilePicture.url
         else:
-            profile["image"] = "/media/placeholder/300x300.png"
+            profile["image"] = "/media/placeholder/profilepicture.png"
         profile["bio"] = self.bio
 
         profile["posts"] = str(len(postObjects))
@@ -42,6 +42,13 @@ class ProfileModel(models.Model):
 
         return profile
 
+    def toDictFollowers(self):
+        followersUsername = []
+        tempFollowers = self.following.all()
+        for person in tempFollowers:
+            followersUsername.append(person.user.username)
+
+        return self.following.all()
 
 
 
@@ -123,6 +130,19 @@ class LikeModel(models.Model):
     profile = models.ForeignKey(ProfileModel, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+        super().save(*args, {})
+        print("---------------------------------------------------------------------------------------------------------------ADDING")
+        NotificationModel.objects.create(actor=kwargs['profile'], notifier=kwargs['post'].profile, entity=kwargs['post'].id, notificationType=1)
+
+    def delete(self):
+        print("---------------------------------------------------------------------------------------------------------------DELETING")
+        
+        NotificationModel.objects.filter(actor=self.profile, notifier=self.post.profile, entity=self.post.id, notificationType=1).delete()
+        
+        super(LikeModel, self).delete()
+
+
 class CommentModel(models.Model):
     post = models.ForeignKey(PostModel, on_delete=models.CASCADE)
     profile = models.ForeignKey(ProfileModel, on_delete=models.CASCADE)
@@ -138,12 +158,54 @@ class CommentModel(models.Model):
         tempComment["id"] = self.id
         tempComment["username"] = self.profile.user.username
         tempComment["comment"] = self.comment
-        tempComment["profilePicture"] = self.profile.profilePicture.url
+        if self.profile.profilePicture:
+            tempComment["profilePicture"] = self.profile.profilePicture.url
+        else:
+            tempComment["profilePicture"] = "/media/placeholder/profilepicture.png"
 
         if self.parentComment:
             tempComment["parentComment"] = self.parentComment.id
 
         return tempComment
+
+
+    def save(self, *args, **kwargs):
+        super().save(*args, {})
+        print("---------------------------------------------------------------------------------------------------------------ADDING")
+        NotificationModel.objects.create(actor=kwargs['profile'], notifier=kwargs['post'].profile, entity=kwargs['post'].id, notificationType=2)
+
+    def delete(self):
+        print("---------------------------------------------------------------------------------------------------------------DELETING")
+        
+        NotificationModel.objects.filter(actor=self.profile, notifier=self.post.profile, entity=self.post.id, notificationType=2).delete()
+        
+        super(LikeModel, self).delete()
+
+
+class NotificationModel(models.Model):
+    actor = models.ForeignKey(ProfileModel, related_name='actor', on_delete=models.CASCADE)
+    notifier = models.ForeignKey(ProfileModel, related_name='notifier', on_delete=models.CASCADE)
+    entity = models.IntegerField()
+    notificationType = models.IntegerField()
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        if (self.notificationType == 1):
+            return self.actor.user.username + " liked your post"
+        elif (self.notificationType == 2):
+            return self.actor.user.username + " commented on your post"
+
+
+    def toDict(self):
+        notification={}
+        notification["id"] = self.id
+        notification["actor"] = self.actor.user.username
+        notification["notifier"] = self.notifier.user.username
+        notification["entity"] = self.entity
+        notification["notificationType"] = self.notificationType
+        notification["notification"] = str(self)
+
+        return notification
 
 def getTimeDifference(time):
     difference = datetime.now(timezone.utc) - time

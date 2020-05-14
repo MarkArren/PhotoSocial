@@ -24,6 +24,15 @@ def chatRoom(request, room_name):
         'room_name': room_name
     })
 
+def messages(request):
+    followingList = getCurrentProfile(request).toDictFollowers()
+    print(followingList)
+    for person in followingList:
+        print(person.user.username)
+    context = {
+        "following": followingList,
+    }
+    return render(request, 'myapp/chats.html', context)
 
 
 def index(request):
@@ -128,7 +137,7 @@ def likePost(request):
             # Adds a like to a post
             like = models.LikeModel(
                 post=post, profile=getCurrentProfile(request))
-            like.save()
+            like.save(post=post, profile=getCurrentProfile(request))
 
     return redirect("/")
 
@@ -145,7 +154,7 @@ def commentPost(request):
             parentComment = models.CommentModel.objects.get(id=request.POST["parentComment"])
 
         comment = models.CommentModel(post=post, profile=getCurrentProfile(request), comment=comment, parentComment=parentComment)
-        comment.save()
+        comment.save(post=post, profile=getCurrentProfile(request))
 
     return redirect("/")
 
@@ -291,6 +300,25 @@ def post(request):
             return render(request, 'myapp/post.html', context)
     else:
         return redirect("/")
+
+
+def getNotifications(request):
+    profile = getCurrentProfile(request)
+    notificationObjects = models.NotificationModel.objects.filter(notifier=profile.id).order_by('-date')
+    notificationList = []
+
+    # Loop through data backwards parsing values into the new list
+    for i in range(len(notificationObjects)):
+        notification = notificationObjects[i]
+        tempNotification = notification.toDict()
+        notificationList.append(tempNotification.copy())
+
+    context = {
+        "notifications": notificationList,
+    }
+
+    return JsonResponse(context)
+
 
 # Makes post in database
 def makePost(request):

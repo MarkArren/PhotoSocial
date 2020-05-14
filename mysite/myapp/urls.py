@@ -16,7 +16,8 @@ urlpatterns = [
     path('posts/', views.getPosts),
     path('search/', views.searchPosts),
     path('searchvue/', views.searchPostsJSON),
-    path('messages/', views.index),
+    path('messages/', views.messages),
+    path('notifications/', views.getNotifications),
 
     path('chat/', views.chatIndex),
     path('chat/<str:room_name>/', views.chatRoom),

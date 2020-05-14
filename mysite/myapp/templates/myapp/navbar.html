@@ -10,13 +10,15 @@
 	</div>
 	
 	<ul class="menu nav-bar-right">
+		<a href="/post">
+			<i data-feather="message-square" class="post-icon"></i>
+		</a>
 		{% if user.is_authenticated %}
 		<a href="/post">
 			<i data-feather="plus-square" class="post-icon"></i>
 		</a>
 		{% verbatim %}
-		<span v-if="showNotifications"> CLICKED </span>
-		<a v-on:click="showNotifications = !showNotifications">
+		<a v-on:click="toggleNotifications()">
 			<i data-feather="heart" class="post-icon fill-white"></i>
 		</a>
 		{% endverbatim %}
@@ -29,4 +31,13 @@
 		<li><button type="button" class="clear button">Sign Up</button></li>
 		{% endif %}
 	</ul>
+
+	{% verbatim %}
+	<div class="notification-container" v-if="showNotifications">
+		<div class="notification" v-for="notification in notifications">{{ notification.notification }}</div>
+		<span v-if="!hasNotifications" class="notification">You have no notifications</span>
+	</div>
+	{% endverbatim %}
 </nav>
+
+

@@ -80,8 +80,8 @@ def compressImage(image):
 
 class PostForm(forms.Form):
 	image = forms.ImageField(label="Upload Image", required=True)
-	caption = forms.CharField(label="Caption", max_length=512, required=False)
-	location = forms.CharField(label="Location", max_length=50, required=False)
+	caption = forms.CharField(label="Caption", max_length=512, required=False, widget=forms.TextInput(attrs={'placeholder': 'Caption'}))
+	location = forms.CharField(label="Location", max_length=50, required=False, widget=forms.TextInput(attrs={'placeholder': 'Location'}))
 
 	def save(self, request):
 		postInstance = models.PostModel()
