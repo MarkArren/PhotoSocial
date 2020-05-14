@@ -4,6 +4,7 @@ var posts = new Vue({
         posts: [],
         seen: true,
         unseen: false,
+        empty: true
     },
     // Adapted from https://stackoverflow.com/questions/36572540/vue-js-auto-reload-refresh-data-with-timer
     created: function(){
@@ -14,10 +15,14 @@ var posts = new Vue({
         fetchPostList: function(){
             axios
 				.get('/posts/')
-                .then(response => (this.posts = response.data.posts))
+                .then(response => {
+                    this.posts = response.data.posts;
+                    if (this.posts.length > 0)
+                        this.empty = false
+                })
 			this.seen = false
 			this.unseen = true
-			console.log("Refreshing main page")
+            console.log("Refreshing main page")
         },
         cancelAutoUpdate: function(){ clearInterval(this.timer) },
     },

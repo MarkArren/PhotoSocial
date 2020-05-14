@@ -52,7 +52,13 @@
 		v-bind:key="post.id"
 		v-bind:post="post"
 		v-on:refresh="fetchPostList()"
-      	></post>
+		  ></post>
+		<div v-if="empty" class="post-container notification">
+			<span>Please follow users to see posts</span><br>
+			<span>Some users you can follow:</span><br>
+			<a href="/u/mark"><span>mark</span></a><br>
+			<a href="/u/christian"><span>christian</span></a><br>
+			</div>
 		<!-- {% endverbatim %} -->
 	</span>
 	<span v-if="seen">

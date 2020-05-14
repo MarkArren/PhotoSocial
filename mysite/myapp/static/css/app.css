@@ -223,8 +223,13 @@ hr {
 .comment{
 	display: flex;
     margin: 0 10px;
-    margin-top: 10px;
+	margin-top: 10px;
+	color: black;
     /* border-bottom: 1px solid gainsboro; */
+}
+
+.comment a{
+	color: black;
 }
 
 .comment img{
@@ -278,8 +283,19 @@ hr {
 	fill: black;
 }
 
+.fill-black {
+	fill: white;
+}
+
 .fill-red {
 	fill: red;
+}
+
+.post-icon-white {
+	color: white;
+	width: 45;
+	height: 45;
+	stroke-width: 1;
 }
 
 

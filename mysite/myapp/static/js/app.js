@@ -7,6 +7,7 @@ var postComponent = Vue.component("post", {
                 <img :src="post.image" />
                 <div class="post-caption">
                     <a :href="'/u/' + post.username" class="username">@{{ post.username }}</a><br>
+                    <span v-if="post.location"><i data-feather="navigation" class="post-icon-white"></i>{{ post.location }}<br></span>
                     <span>{{ post.caption }}</span>
                 </div>
             </div>
@@ -44,7 +45,7 @@ var postComponent = Vue.component("post", {
                     <div class="comment">
                         <div><img :src="commentObjects.comment.profilePicture" alt="profile"></div>
                         <div>
-                            <span class="username">@{{ commentObjects.comment.username }}</span></br>
+                            <a :href="'/u/' + commentObjects.comment.username"><span class="username">@{{ commentObjects.comment.username }}</span></a></br>
                             <span>{{ commentObjects.comment.comment }}</span></br>
                             <a v-on:click="parentComment = commentObjects.comment.id" class="reply">reply</a>
                         </div>
@@ -55,7 +56,7 @@ var postComponent = Vue.component("post", {
                         <div v-for="childComment in commentObjects.childComments" class="comment">
                             <div><img :src="childComment.profilePicture" alt="profile"></div>
                             <div>
-                                <span class="username">@{{ childComment.username }}</span></br>
+                                <a :href="'/u/' + childComment.username"><span class="username">@{{ childComment.username }}</span></a></br>
                                 <span>{{ childComment.comment }}</span>
                             </div>
                             <div></div>
