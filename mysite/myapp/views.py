@@ -244,7 +244,7 @@ def profileedit(request):
         user = profile.user
 
         if request.method == "POST":
-            userForm = forms.RegistrationForm(request.POST, instance=user)
+            userForm = forms.UserUpdateForm(request.POST, instance=user)
             profileForm = forms.ProfileForm(request.POST, request.FILES, instance=profile)
 
             if userForm.is_valid() and profileForm.is_valid():
@@ -260,7 +260,7 @@ def profileedit(request):
                 print("profile " + str(profileForm.is_valid()))
         else:
             # Return page with forms
-            userForm = forms.RegistrationForm(instance=user, initial={'fullname':user.first_name + ' ' + user.last_name})
+            userForm = forms.UserUpdateForm(instance=user)
             profileForm = forms.ProfileForm(instance=profile)
         context = {
             "form": userForm,

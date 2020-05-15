@@ -150,6 +150,12 @@ class ProfileForm(ModelForm):
 		model = ProfileModel
 		fields = ('profilePicture', 'fullname', 'email', 'bio')
 
+class UserUpdateForm(forms.ModelForm):       
+    class Meta:
+        model = User
+        fields = ('username', 'email') 
+
+
 # class ProfileForm(forms.Form):
 #     profilePicture = forms.ImageField(label="Profile Picture", required=False)
 #     bio = forms.CharField(label="Bio", max_length=512, required=False)

@@ -9,16 +9,12 @@
         {% csrf_token %}
         {{ form.errors }}
         {{ profileForm.errors }}
-		{{ profileForm.email.label_tag }}
+        {{ profileForm.email.label_tag }}
         {{ profileForm.email }}
-		{{ profileForm.fullname.label_tag }}
+        {{ profileForm.fullname.label_tag }}
         {{ profileForm.fullname }}
         {{ form.username.label_tag }}
         {{ form.username }}
-        {{ form.password1.label_tag }}
-        {{ form.password1 }}
-        {{ form.password2.label_tag }}
-        {{ form.password2 }}
         {{ profileForm.bio.label_tag }}
         {{ profileForm.bio }}
         {{ profileForm.profilePicture.label_tag }}
